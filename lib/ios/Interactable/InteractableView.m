@@ -8,7 +8,8 @@
 
 #import "InteractableView.h"
 #import <React/UIView+React.h>
-#import <React/RCTRootView.h>
+#import <React/RCTRootContentView.h>
+#import <React/RCTTouchHandler.h>
 #import <React/RCTEventDispatcher.h>
 
 @interface InteractableEvent : NSObject <RCTEvent>
@@ -357,23 +358,23 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 
 - (void)cancelCurrentReactTouch
 {
-    RCTRootView *view = [self getRootView];
+    RCTRootContentView *view = [self getRootView];
     if (view != nil)
     {
-        [(RCTRootView*)view cancelTouches];
+        [view.touchHandler cancel];
     }
 }
 
-- (RCTRootView*)getRootView
+- (RCTRootContentView*)getRootView
 {
     UIView *view = self;
     while (view.superview != nil)
     {
         view = view.superview;
-        if ([view isKindOfClass:[RCTRootView class]]) break;
+        if ([view isKindOfClass:[RCTRootContentView class]]) break;
     }
     
-    if ([view isKindOfClass:[RCTRootView class]])
+    if ([view isKindOfClass:[RCTRootContentView class]])
     {
         return view;
     }
