@@ -17,10 +17,32 @@ android {
         }
     }
 
+    // testOptions {
+    //     unitTests.all { t ->
+    //         reports {
+    //             // html.enabled true
+    //             destination = file("$buildDir/some-path")
+    //         }
+    //         testLogging {
+    //             events "passed", "skipped", "failed", "standardOut", "standardError"
+    //         }
+    //         afterSuite { desc, result ->
+    //             if (!desc.parent) { // will match the outermost suite
+    //                 def output = "      ${result.resultType} (${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)     "
+    //                 def repeatLength = output.length()
+    //                 println '\n' + ('-' * repeatLength) + '\n' + output + '\n' + ('-' * repeatLength) + '\n'
+
+    //                 println "see report at file://${t.reports.html.destination}/index.html"
+    //             }
+    //         }
+    //     }
+    // }
     testOptions {
         unitTests.all { t ->
             reports {
-                html.enabled true
+                // Enable HTML reports and set the output location
+                html.required.set(true)
+                html.outputLocation.set(layout.buildDirectory.dir("test-results"))
             }
             testLogging {
                 events "passed", "skipped", "failed", "standardOut", "standardError"
@@ -31,11 +53,12 @@ android {
                     def repeatLength = output.length()
                     println '\n' + ('-' * repeatLength) + '\n' + output + '\n' + ('-' * repeatLength) + '\n'
 
-                    println "see report at file://${t.reports.html.destination}/index.html"
+                    println "see report at file://${t.reports.html.outputLocation.get().asFile}/index.html"
                 }
             }
         }
     }
+
 }
 
 dependencies {
